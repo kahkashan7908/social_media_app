@@ -1,0 +1,29 @@
+{% extends 'users/base.html' %}
+{% block body %}
+<h2 class="text-2xl m-10 font-bold">📸 Create A Post</h2>
+<div class="container py-5 mx-10">
+    
+<form method="post" class="bg-white shadow-md  px-8 rounded pt-6 pb-8 mb-4 w-3/5" enctype="multipart/form-data">
+  {% csrf_token %} 
+  <div class="mb-2">
+    <label class="block text-grey-700 text-sm font-bold mb-2" for="">Add Title</label>
+     <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none" type="text" name="{{ form.title.name }}">
+    </div>
+   
+  <div class="mb-2">
+    <label class="block text-grey-700 text-sm font-bold mb-2" for="">Upload image</label>
+    <div class="shadow appearance-none border rounded w-full py-2 px-3 mr-10 text-grey-700">{{form.image}}</div>
+   
+  </div>
+  <div class="mb-2">
+    <label class="block text-grey-700 text-sm font-bold mb-2" for="{{ form.caption.id_for_label }}">Caption</label>
+    <textarea name="{{ form.caption.name }}" class="shadow appearance-none border rounded w-full py-2 px-3 text-grey-700 leading-tight focus:outline-none resize-none" style="min-height: 150px;"></textarea>
+</div>
+
+  <button type="submit" class="bg-green-500 text-white my-5 px-5 py-2">Submit</button>
+   
+  </div>
+</form>
+
+</div>
+{% endblock %}

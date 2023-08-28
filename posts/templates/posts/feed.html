@@ -1,0 +1,78 @@
+{% extends 'users/base.html' %}
+{% load static %}
+{% block body %}
+   <div class="flex mt-3 p-5 justify-center">
+    <h2 class="text-3xl font-normal mb-2 text-gray-500">My Posts</h2>
+   </div>
+   <div class="grid mx-64 p-10 grid-cols-1">
+    {% for post in posts %}
+    <!--Card starts here-->
+    <div class="rounded overflow-hidden w-3/4 bg-white shadow-md mx-28">
+        <div class="user-container flex mx-5 my-5">
+            <img class="h-10 w-10 rounded-full" src="{{post.user.profile.photo.url}}" alt="">
+            <div class="mx-2 my-2 font-bold"><span class="text-indigo-500">{{post.user}}</span></div>
+        </div>
+        <img class="w-full h-auto" src="{{post.image.url}}" alt="">
+    </div>
+    <div class="px-6 mx-28 mt-1">
+        <div id="csrf-token" data-token="{{ csrf_token }}" class="icon-container flex gap-2">
+            <a id="{{ post.id }}" class="btn-like">
+                {% if logged_user in post.liked_by.all %}
+                <img class="w-5 h-5" src="{% static 'users/images/like.png' %}" alt="">
+                {% else %}
+                <img class="w-4 h-4" src="{% static 'users/images/unlike.png' %}" alt="">
+                {% endif %}
+            </a>
+            <img class="w-4 h-4" src="{% static 'users/images/comment.png' %}" alt="">
+            <img class="w-4 h-4" src="{% static 'users/images/shere.png' %}" alt="">
+        </div>
+    </div>
+
+    <div class="px-6 mx-28 mt-1">
+        {% if post.liked_by.count < 1 %}
+        {% elif post.liked_by.count == 1 %}
+        {{ post.liked_by.first }} likes this
+        {% elif post.liked_by.count > 1 %}
+        {{ post.liked_by.first }} $ {{ post.liked_by.count|add:"-1" }} others likes this
+        {% endif %}
+    </div>
+
+    <div class="px-6 mx-28">
+        <div class="font-bold text-xl mb-1">{{post.title}}</div>
+        <p class="text-gray-700 text-base">{{post.caption}}</p>
+    </div>
+
+    <div class="px-6 mx-28">
+        <h1 class="font-bold">Comments....</h1>
+        <hr>
+        {% for comment in post.comment.all %}
+        <b>{{comment.posted_by}}</b>:{{comment.body}}
+        <br>
+
+        {% endfor%}
+    </div>
+    <div class="px-6 mx-28">
+        <form method="post" class="bg-white rounded ">
+            {% csrf_token %}
+          <div class="flex">
+            <div class="border rounded  mr-10 text-grey-700">
+                {{ comment_form.body }}
+            </div>
+            <div>
+               <input type="hidden" name="post_id" id="post_id" value="{{ post.id }}">
+               <input type="hidden" name="post_by" id="post_by" value="{{ logged_user }}">
+            </div>
+            <button type="submit" class="bg-green-500 text-white px-5 py-2 ml-2 ">
+                Add
+            </button>
+          </div>
+        </form>
+    </div>
+    
+    <!--Card ends here-->
+    {% endfor %}
+   </div>
+   <script src="{% static 'js/script.js' %}" type="text/javascript"></script> 
+{% endblock %}
+
+
